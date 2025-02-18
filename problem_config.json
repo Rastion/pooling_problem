@@ -1,0 +1,38 @@
+{
+    "entry_point": "pooling_problem:PoolingProblem",
+    "default_params": {
+      "instance_file": "instances/adhya1.json"
+    },
+    "problem_type": "Pooling Problem",
+    "description": "In the pooling problem, raw materials (components) with given supplies, prices, and quality attributes are blended (directly or via intermediate pools) to produce final products. Each product has demand and capacity limits, sale prices, and quality tolerance intervals. Flows may occur directly from a component to a product or indirectly via pools (with specified maximum fractions and capacities). The objective is to maximize profit, defined as the product revenue minus the cost of buying raw materials and the cost of flow through the network. Constraints ensure that pool inflows are properly proportioned, supplies and capacities are not exceeded, and the quality of each product remains within tolerance.",
+    "keywords": [
+      "pooling",
+      "blending",
+      "minimal cost flow",
+      "optimization"
+    ],
+    "data_format": {
+      "instance_file": {
+        "format": "A JSON file containing: 'components' (an array of objects with name, lower, upper, price, and quality), 'products' (an array of objects with name, lower, upper, price, quality_lower, quality_upper), 'pool_size' (an object mapping pool names to capacities), and edge data arrays 'component_to_product_bound', 'component_to_pool_fraction', and 'pool_to_product_bound'."
+      }
+    },
+    "decision_variables": {
+      "solution": {
+        "type": "dictionary",
+        "description": "A dictionary with keys 'component_to_product', 'component_to_pool_fraction', and 'pool_to_product', containing the flows (or proportions) on the corresponding edges of the pooling network."
+      }
+    },
+    "objective": {
+      "type": "maximization",
+      "function": "Profit = (Sum_{p in Products} total_inflow[p]*productPrice[p]) - (Sum_{c in Components} total_outflow[c]*componentPrice[c]) - (DirectFlowCost + IndirectFlowCost)",
+      "description": "Maximize the profit obtained by selling the final products at their prices minus the cost of buying the raw materials and the cost incurred on the flow edges. The profit is computed by summing over products the revenue (inflow times price) and subtracting the costs on direct edges (component to product) and indirect edges (component-to-pool and pool-to-product), as well as the cost of raw materials purchased."
+    },
+    "solution_representation": "A dictionary with keys 'component_to_product', 'component_to_pool_fraction', and 'pool_to_product' containing the corresponding flow values.",
+    "compatible_optimizers": [
+      "genetic_algorithm",
+      "simulated_annealing",
+      "particle_swarm",
+      "tabu_search"
+    ]
+  }
+  
